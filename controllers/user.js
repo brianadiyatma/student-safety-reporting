@@ -57,7 +57,7 @@ exports.getReports = (req, res) => {
   const pageSize = +req.query.pagesize || 20;
   const currentPage = +req.query.page || 0;
 
-  Report.find({ approval: true })
+  Report.find({ approval: "approved" })
     .skip(currentPage * pageSize)
     .limit(pageSize)
     .then((documents) => {

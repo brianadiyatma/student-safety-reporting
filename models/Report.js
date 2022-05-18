@@ -44,9 +44,13 @@ const Report = new Schema({
     required: false,
   },
   approval: {
-    type: Boolean,
+    type: String,
     required: true,
-    default: false,
+    default: "pending",
+  },
+  score: {
+    type: String,
+    required: false,
   },
 });
 

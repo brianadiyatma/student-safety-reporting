@@ -9,36 +9,47 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "../../features/authSlice";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Alert, CircularProgress, Container } from "@mui/material";
 
-const SignIn = () => {
-  //redux
-  const [auth, setAuth] = useState({
+const SignUp = () => {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
     email: "",
     password: "",
+    name: "",
   });
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
-  const dispatch = useDispatch();
-  const { isLoading, user, error } = useSelector((state) => state.auth);
-  ///////////////////////////////////////////////////////////////////////////////
-
+  const [loading, setLoading] = useState(false);
   const handleSubmit = (event) => {
+    setLoading(true);
     event.preventDefault();
-    dispatch(login(auth));
+    axios
+      .post("/api/auth/signup", form)
+      .then(() => {
+        setLoading(false);
+        setMessage("Successfully signed up");
+        setError(false);
+        setForm({
+          email: "",
+          password: "",
+          name: "",
+        });
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(err.response.data.message);
+        setMessage("");
+      });
+  };
+  const onChange = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value });
   };
 
-  useEffect(() => {
-    if (user) {
-      navigate(from, { replace: true });
-    }
-  }, [user, navigate, from]);
-
+  useEffect(() => {}, []);
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
@@ -71,9 +82,8 @@ const SignIn = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign Up
           </Typography>
-
           <Box
             component="form"
             noValidate
@@ -81,6 +91,19 @@ const SignIn = () => {
             sx={{ mt: 1 }}
           >
             {error && <Alert severity="error">{error}</Alert>}
+            {message && <Alert severity="success">{message}</Alert>}
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              value={form.name}
+              autoFocus
+              onChange={onChange}
+            />
             <TextField
               margin="normal"
               required
@@ -88,9 +111,8 @@ const SignIn = () => {
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
-              value={auth.email}
-              onChange={(e) => setAuth({ ...auth, email: e.target.value })}
+              onChange={onChange}
+              value={form.email}
               autoFocus
             />
             <TextField
@@ -100,23 +122,23 @@ const SignIn = () => {
               name="password"
               label="Password"
               type="password"
+              onChange={onChange}
+              value={form.password}
               id="password"
-              value={auth.password}
-              onChange={(e) => setAuth({ ...auth, password: e.target.value })}
               autoComplete="current-password"
             />
             <Typography variant="body2">
-              Belum Memiliki Akun ?{" "}
+              Sudah Memiliki Akun ?{" "}
               <Link
-                component="a"
+                component="button"
                 variant="body2"
-                onClick={() => navigate("/sign-up")}
+                onClick={() => navigate("/sign-in")}
               >
-                Daftar
+                Masuk
               </Link>{" "}
             </Typography>{" "}
-            {isLoading ? (
-              <Container sx={{ display: "flex", justifyContent: "center" }}>
+            {loading ? (
+              <Container sx={{display:'flex', justifyContent:'center'}}>
                 <CircularProgress />
               </Container>
             ) : (
@@ -127,7 +149,7 @@ const SignIn = () => {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={handleSubmit}
               >
-                Sign In
+                Sign Up
               </Button>
             )}
           </Box>
@@ -137,4 +159,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;

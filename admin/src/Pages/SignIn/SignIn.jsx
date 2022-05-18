@@ -22,7 +22,7 @@ const SignIn = () => {
   });
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/admin";
 
   const dispatch = useDispatch();
   const { isLoading, user, error } = useSelector((state) => state.auth);
@@ -71,7 +71,7 @@ const SignIn = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign in (ADMIN)
           </Typography>
 
           <Box

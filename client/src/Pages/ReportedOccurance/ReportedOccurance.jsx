@@ -102,6 +102,9 @@ const ReportedOccurance = () => {
                   <TableCell align="right" width={120}>
                     Admin Feedback
                   </TableCell>
+                  <TableCell align="right" width={120}>
+                    Safety Index
+                  </TableCell>
                   <TableCell align="center" width={120}>
                     PDF
                   </TableCell>
@@ -136,6 +139,9 @@ const ReportedOccurance = () => {
                     </TableCell>
                     <TableCell component="th" scope="row" align="right">
                       {data.adminFeedBack}
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="right">
+                      {data.score}
                     </TableCell>
                     <TableCell component="th" scope="row" align="center">
                       <IconButton>

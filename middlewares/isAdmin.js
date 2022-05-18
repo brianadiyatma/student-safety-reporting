@@ -18,10 +18,10 @@ module.exports = (req, res, next) => {
     if (err) {
       return res.status(401).json({ error: "Token invalid" });
     }
-    if (decoded.privilege === "admin") {
+    if (decoded.privilege === "user") {
       return res
         .status(401)
-        .json({ error: "You are not authorized (User Only)" });
+        .json({ error: "You are not authorized (Admin Only)" });
     }
     req.user = decoded;
     return next();

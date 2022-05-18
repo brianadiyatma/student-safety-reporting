@@ -22,9 +22,9 @@ const User = new Schema({
     default: "user",
   },
   activation: {
-    type: Boolean,
+    type: String,
     required: true,
-    default: false,
+    default: "pending",
   },
   createdAt: {
     type: Date,
@@ -37,4 +37,3 @@ const User = new Schema({
 });
 
 module.exports = mongoose.model("User", User);
-

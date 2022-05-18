@@ -132,10 +132,27 @@ const OccuranceHistory = () => {
                       {data.details}
                     </TableCell>
                     <TableCell component="th" scope="row" align="right">
-                      <Chip
-                        label={data.approval ? "Approved" : "Denied"}
-                        color={data.approval ? "success" : "error"}
-                      />
+                      {data.approval === "pending" && (
+                        <Chip
+                          label="Pending"
+                          color="secondary"
+                          variant="outlined"
+                        />
+                      )}
+                      {data.approval === "approved" && (
+                        <Chip
+                          label="Approved"
+                          color="primary"
+                          variant="outlined"
+                        />
+                      )}
+                      {data.approval === "rejected" && (
+                        <Chip
+                          label="Rejected"
+                          color="secondary"
+                          variant="outlined"
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

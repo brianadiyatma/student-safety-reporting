@@ -30,7 +30,7 @@ exports.signup = (req, res, next) => {
       name,
       email,
       password,
-      activation: true,
+      activation: "pending",
     });
     bcrypt
       .hash(password, 12)
@@ -66,7 +66,7 @@ exports.signin = (req, res, next) => {
       if (!user) {
         return res.status(401).json({ error: "User not found" });
       }
-      if (user.activation === false) {
+      if (user.activation === "pending" || user.activation === "rejected") {
         return res.status(401).json({ error: "User not activated" });
       }
       bcrypt.compare(password, user.password).then((valid) => {

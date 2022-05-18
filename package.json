@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "startServer": "nodemon app.js",
     "startClient": "cd client && npm start",
-    "start": "concurrently \"npm run startServer\" \"npm run startClient\""
+    "startAdmin": "cd admin && npm start",
+    "start": "concurrently \"npm run startServer\" \"npm run startClient\" \"npm run startAdmin\""
   },
   "keywords": [],
   "author": "",
