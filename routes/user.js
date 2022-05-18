@@ -6,5 +6,6 @@ const auth = require("../middlewares/auth");
 router.post("/submit-report", auth, userController.submitReport);
 router.get("/get-reports", auth, userController.getReports);
 router.get("/get-reports-by-user", auth, userController.getReportsbyUser);
+router.get("/download-report/:id", auth, userController.downloadReport);
 
 module.exports = router;

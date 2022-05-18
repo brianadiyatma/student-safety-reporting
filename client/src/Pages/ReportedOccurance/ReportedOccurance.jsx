@@ -28,6 +28,27 @@ const ReportedOccurance = () => {
   const [err, setErr] = useState();
   const { user } = useSelector((state) => state.auth);
 
+  const handlePDFDownload = (id) => {
+    axios
+      .get(`/api/user/download-report/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+        responseType: "blob",
+      })
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "report.pdf");
+        document.body.appendChild(link);
+        link.click();
+      })
+      .catch((err) => {
+        console.log(err);
+        setErr(err.response.data.message);
+      });
+  };
   useEffect(() => {
     setLoading(true);
     axios
@@ -144,7 +165,7 @@ const ReportedOccurance = () => {
                       {data.score}
                     </TableCell>
                     <TableCell component="th" scope="row" align="center">
-                      <IconButton>
+                      <IconButton onClick={() => handlePDFDownload(data._id)}>
                         <Download />
                       </IconButton>
                     </TableCell>

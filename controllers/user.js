@@ -1,4 +1,6 @@
 const Report = require("../models/Report");
+const pdfTemplate = require("../document/index");
+const pdf = require("html-pdf");
 
 exports.submitReport = (req, res) => {
   const {
@@ -77,6 +79,50 @@ exports.getReports = (req, res) => {
         });
     });
 };
+
+exports.downloadReport = (req, res) => {
+  const id = req.params.id;
+
+  Report.findById(id).then((report) => {
+    if (!report) {
+      return res.status(404).json({
+        message: "Report not found",
+      });
+    }
+    const html = pdfTemplate(report);
+    const options = {
+      format: "A4",
+      orientation: "portrait",
+      border: "10mm",
+    };
+    pdf.create(html, options).toStream((err, stream) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Error creating PDF",
+          error: err,
+        });
+      }
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${report.callsign}-${report.time}.pdf`
+      );
+      stream.pipe(res);
+    });
+  });
+};
+
+// pdf.create(html, options).toFile("report.pdf", (err, result) => {
+//   if (err) {
+//     res.status(500).json({
+//       message: "Error generating PDF",
+//       error: err,
+//     });
+//   } else {
+//     res.sendFile(result.filename);
+//   }
+// });
+
 exports.getReportsbyUser = (req, res) => {
   //get report with pagination
   const pageSize = +req.query.pagesize || 20;
