@@ -105,16 +105,7 @@ const SignIn = () => {
               onChange={(e) => setAuth({ ...auth, password: e.target.value })}
               autoComplete="current-password"
             />
-            <Typography variant="body2">
-              Belum Memiliki Akun ?{" "}
-              <Link
-                component="a"
-                variant="body2"
-                onClick={() => navigate("/sign-up")}
-              >
-                Daftar
-              </Link>{" "}
-            </Typography>{" "}
+
             {isLoading ? (
               <Container sx={{ display: "flex", justifyContent: "center" }}>
                 <CircularProgress />
