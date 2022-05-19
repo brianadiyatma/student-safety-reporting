@@ -26,25 +26,6 @@ app.use("/api/admin", adminRoute);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
   app.use(express.static("admin/build"));
-  app.use((req, res, next) => {
-    User.findOne({ privilege: "admin" })
-      .then((user) => {
-        if (!user) {
-          const newUser = new User({
-            name: "Admin",
-            email: "admin@admin.com",
-            password:
-              "$2b$12$pAeTgCfVwdvXvIp.62OSoe9YHDvhLND29ed8Req5N5vdgABgtGGAi",
-            privilege: "admin",
-            activation: "activated",
-          });
-          newUser.save();
-        }
-      })
-      .then(() => {
-        next();
-      });
-  });
 
   app.get("/admin", (req, res) => {
     res.sendFile(path.resolve(__dirname, "admin", "build", "index.html"));
